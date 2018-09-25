@@ -1,0 +1,48 @@
+package org.firstinspires.ftc.teamcode;
+
+
+
+public class DriveMethods extends HardwarePushBot{
+
+    public static void driveRight(double speed){
+        rightFrontDrive.setPower(speed);
+        rightBackDrive.setPower(speed);
+    }
+
+    public static void driveLeft(double speed){
+        leftFrontDrive.setPower(speed);
+        leftBackDrive.setPower(speed);
+    }
+
+    
+    public static void stopRightMotors() { 
+        rightFrontDrive.setPower(0);
+        rightBackDrive.setPower(0);
+    }
+
+    public static void stopLeftMotors(){
+        leftFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+    }
+
+    
+
+    public static void glyphLift(double speed){
+        glyphLift.setPower(speed);
+    }
+
+    public static void openGlyph (){
+        glyphLiftRight.setPosition(0.55);//0.55
+        glyphLiftLeft.setPosition(0.4);//0.4
+        glyphLiftRight2.setPosition(0.55);
+        glyphLiftLeft2.setPosition(0.4);
+    }
+
+    public static void closeGlyph (){
+        glyphLiftRight.setPosition(0.25);
+        glyphLiftLeft.setPosition(0.6);
+        glyphLiftRight2.setPosition(0.25);
+        glyphLiftLeft2.setPosition(0.6);
+    }
+
+}
