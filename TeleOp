@@ -1,0 +1,83 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+
+
+@TeleOp(name="TeleOp", group="group")
+
+public class New_TeleOp extends LinearOpMode{
+
+    public static HardwarePushBot robot = new HardwarePushBot();
+    public static ElapsedTime runTime = new ElapsedTime();
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+        robot.init(hardwareMap);
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.addData("Hello Driver", "Press Play Button");
+        telemetry.update();
+
+        waitForStart();
+        while (opModeIsActive()) {
+
+            double RIGHTPOW = -gamepad1.right_stick_y * 0.8;
+            double LEFTPOW = -gamepad1.left_stick_y * 0.8;
+            double REVERSE_THRES = -0.5;
+            double FORWARD_THRES = 0.5;
+            double drive_Speed = 0.6;
+            double turn_Speed = 0.4;
+
+            double LIFTPOW = -gamepad2.left_stick_y;
+            double UP_THRES = 0.5;
+            double DOWN_THRES = -0.5;
+
+            
+            if(RIGHTPOW < FORWARD_THRES && RIGHTPOW > REVERSE_THRES && LEFTPOW < FORWARD_THRES && LEFTPOW > REVERSE_THRES){
+                DriveMethods.stopRightMotors();
+                DriveMethods.stopLeftMotors();
+            }else if(RIGHTPOW != 0.0 && LEFTPOW != 0.0) {
+                DriveMethods.driveRight(RIGHTPOW * drive_Speed);
+                DriveMethods.driveLeft(LEFTPOW * drive_Speed);
+            }else if(RIGHTPOW != 0.0 && LEFTPOW == 0.0){
+                DriveMethods.driveRight(RIGHTPOW * drive_Speed);
+            }else if(LEFTPOW != 0.0 && RIGHTPOW == 0.0) {
+                DriveMethods.driveLeft(LEFTPOW * drive_Speed);
+            }else if(RIGHTPOW < REVERSE_THRES && LEFTPOW > FORWARD_THRES){
+                DriveMethods.driveLeft(LEFTPOW * turn_Speed);
+                DriveMethods.driveRight(RIGHTPOW * turn_Speed);
+            }else if(RIGHTPOW > FORWARD_THRES && LEFTPOW < REVERSE_THRES){
+                DriveMethods.driveLeft(LEFTPOW * turn_Speed);
+                DriveMethods.driveRight(RIGHTPOW * turn_Speed);
+            }
+
+            if(LIFTPOW < UP_THRES && LIFTPOW > DOWN_THRES) {
+                DriveMethods.glyphLift(0);
+
+            }else if(LIFTPOW > UP_THRES){
+                DriveMethods.glyphLift(-LIFTPOW * -0.5);
+
+            }else{
+                DriveMethods.glyphLift(LIFTPOW * 0.5);
+            }
+
+            if(gamepad2.b) {
+                DriveMethods.openGlyph();
+            }
+            if(gamepad2.a){
+                DriveMethods.closeGlyph();
+            }
+
+            telemetry.addData("Status", "Run Time: " + runTime.toString());
+            telemetry.addData("Motors", "power (%.2f)");
+            telemetry.update();
+        }
+    }
